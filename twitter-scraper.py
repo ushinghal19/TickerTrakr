@@ -27,7 +27,7 @@ def home_data():
     ts = TwitterSearch(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
     search_obj = TwitterSearchOrder()
-    search_obj.set_keywords(['TLRY', '$TLRY', 'TLRY$'])
+    search_obj.set_keywords(['AAL', '$AAL', 'AAL$'])
     search_obj.set_language('en')
     search_obj.set_include_entities(False)
     search_obj.set_since(yesterday)
@@ -35,28 +35,42 @@ def home_data():
 
     count_tweets = 0
 
-    print('checking twitter for tweets of TSLA ...')
+    print('checking twitter for tweets of AAL ...')
 
     for _ in ts.search_tweets_iterable(search_obj):
         count_tweets += 1
 
-    print('there were {} tweets of TSLA today'.format(count_tweets))
+    print('there were {} tweets of AAL today'.format(count_tweets))
 
     search_obj.set_negative_attitude_filter()
     count_negative = 0
     for _ in ts.search_tweets_iterable(search_obj):
         count_negative += 1
 
-    print('according to twitter, there were {} negative tweets of TSLA today'.format(count_negative))
+    print('according to twitter, there were {} negative tweets of AAL today'.format(count_negative))
 
     search_obj.set_positive_attitude_filter()
     count_positive = 0
     for _ in ts.search_tweets_iterable(search_obj):
         count_positive += 1
 
-    print('according to twitter, there were {} positive tweets of TSLA today'.format(count_positive))
+    sum_of_sentiment = count_negative + count_positive
+    if sum_of_sentiment != 0:
+        percentage_sentiment = count_positive / sum_of_sentiment * 100
+        if percentage_sentiment > 50:
+            percentage_sentiment = str(percentage_sentiment-50) + "%"
+            sentiment="positive"
+        else:
+            percentage_sentiment = str(percentage_sentiment - 50) + "%"
+            sentiment="negative"
+    else:
+        percentage_sentiment = "0%"
+        sentiment="positive"
+
+    print('according to twitter, there were {} positive tweets of AAL today'.format(count_positive))
 
     results = {'count_tweets': count_tweets, 'count_negative': count_negative, 'count_positive': count_positive}
+
     ############################################################################
     ############################################################################
     reddit = praw.Reddit(client_id='fR7cRCGQceQ3DQ',
@@ -67,11 +81,12 @@ def home_data():
     subreddits = ['stocks', 'wallstreetbets']
     for i in range(len(subreddits)):
         subreddits[i] = reddit.subreddit(subreddits[i])
-    reddit_mentions = search_ticker_mentions('TSLA', subreddits, limit=100)
+    reddit_mentions = search_ticker_mentions('AAL', subreddits, limit=100)
 
     ############################################################################
 
-    return render_template("index.html", count_tweets=count_tweets, reddit_mentions=reddit_mentions)
+    return render_template("index.html", count_tweets=count_tweets, percentage_sentiment=percentage_sentiment,
+                           sentiment=sentiment,reddit_mentions=reddit_mentions)
 
 
 @app.route('/<ticker>')
@@ -121,7 +136,7 @@ def get_twitter_data(ticker):
         subreddits[i] = reddit.subreddit(subreddits[i])
     reddit_mentions = search_ticker_mentions(ticker, subreddits, limit=100)
     ############################################################################
-    return render_template("ticker.html", ticker=ticker, count_tweets=count_tweets, reddit_mentions = reddit_mentions)
+    return render_template("ticker.html", ticker=ticker, count_tweets=count_tweets, reddit_mentions=reddit_mentions)
 
 
 if __name__ == '__main__':
