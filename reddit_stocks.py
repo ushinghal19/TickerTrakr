@@ -371,12 +371,12 @@ if __name__ == "__main__":
                          username='stock2020',
                          password='stocks2020')
 
-    subreddits = ['investing', 'stocks', 'economics', 'stockmarket', 'economy', 'wallstreetbets',
-                  'options', 'finance', 'securityanalysis', 'pennystocks', 'robinhood', 'trading',]
-    # subreddits = ['stocks', 'wallstreetbets']
+    # subreddits = ['investing', 'stocks', 'economics', 'stockmarket', 'economy', 'wallstreetbets',
+    #               'options', 'finance', 'securityanalysis', 'pennystocks', 'robinhood', 'trading',]
+    subreddits = ['stocks', 'wallstreetbets']
     for i in range(len(subreddits)):
         subreddits[i] = reddit.subreddit(subreddits[i])
 
-    print(get_top_mentions(subreddits, limit=10000))
+    # print(get_top_mentions(subreddits, limit=10000))
     # print(get_most_upvoted(subreddits, limit=100))
-    # print(search_ticker_mentions('CRSR', subreddits, limit=1000))
+    print(search_ticker_mentions('TSLA', subreddits, limit=100))
