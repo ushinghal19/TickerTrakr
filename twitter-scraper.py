@@ -1,13 +1,15 @@
 from flask import Flask, redirect, url_for, render_template, request
 from TwitterSearch import *
-from datetime import date
+from datetime import date, timedelta
 
 app = Flask(__name__)
+
+today = date.today()
+yesterday = today-timedelta(1)
 
 
 @app.route('/', methods=["POST", "GET"])
 def home_data():
-    today = date.today()
 
     consumer_key = "joSmtoOQCwLPD9bCcaX1c4voM"
     consumer_secret = "aFnZYFzf62mZG2WunjhvMDrC9LklUjNRQTE9GkT1MIPdWWdZqj"
@@ -21,10 +23,13 @@ def home_data():
     search_obj.set_keywords(['TSLA', '$TSLA', 'TSLA$'])
     search_obj.set_language('en')
     search_obj.set_include_entities(False)
-    search_obj.set_since(today)
+    search_obj.set_since(yesterday)
+    search_obj.set_until(today)
 
     count_tweets = 0
-    print('checking twitter for tweets of TSLA')
+
+    print('checking twitter for tweets of TSLA ...')
+
     for _ in ts.search_tweets_iterable(search_obj):
         count_tweets += 1
 
@@ -56,8 +61,6 @@ def home_data():
 @app.route('/<ticker>')
 def get_twitter_data(ticker):
 
-    today = date.today()
-
     consumer_key = "joSmtoOQCwLPD9bCcaX1c4voM"
     consumer_secret = "aFnZYFzf62mZG2WunjhvMDrC9LklUjNRQTE9GkT1MIPdWWdZqj"
 
@@ -70,7 +73,8 @@ def get_twitter_data(ticker):
     search_obj.set_keywords([ticker, '$'+ticker, ticker+'$'])
     search_obj.set_language('en')
     search_obj.set_include_entities(False)
-    search_obj.set_since(today)
+    search_obj.set_since(yesterday)
+    search_obj.set_until(today)
 
     count_tweets = 0
     print('checking twitter for tweets of {} ...'.format(ticker))
