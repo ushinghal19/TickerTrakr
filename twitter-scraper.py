@@ -15,6 +15,8 @@ CONSUMER_SECRET = "aFnZYFzf62mZG2WunjhvMDrC9LklUjNRQTE9GkT1MIPdWWdZqj"
 ACCESS_TOKEN_KEY = "903283539860267009-8ndI3VdEEPUGO3K2uj6M8tYSWUFJRNT"
 ACCESS_TOKEN_SECRET = "lcJd372YHdzTID26QvnqP2H1LHKkOB49ukEpEovMwbFOH"
 
+saved_tickers = {}
+
 
 @app.route('/', methods=["POST", "GET"])
 def home_data():
@@ -25,8 +27,9 @@ def home_data():
     ####################################################################
     ts = TwitterSearch(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
+    ticker_symbols = ['AAL', '$AAL', 'AAL$']
     search_obj = TwitterSearchOrder()
-    search_obj.set_keywords(['AAL', '$AAL', 'AAL$'])
+    search_obj.set_keywords(ticker_symbols)
     search_obj.set_language('en')
     search_obj.set_include_entities(False)
     search_obj.set_since(yesterday)
@@ -34,41 +37,48 @@ def home_data():
 
     count_tweets = 0
 
-    print('checking twitter for tweets of AAL ...')
+    if ticker_symbols[0] in saved_tickers:
+        print('checking twitter for tweets of AAL (saved) ...')
+        count_tweets = saved_tickers[ticker_symbols[0]][0]
+        percentage_sentiment = saved_tickers[ticker_symbols[0]][1]
+        sentiment = saved_tickers[ticker_symbols[0]][2]
 
-    for _ in ts.search_tweets_iterable(search_obj):
-        count_tweets += 1
-
-    print('there were {} tweets of AAL today'.format(count_tweets))
-
-    search_obj.set_negative_attitude_filter()
-    count_negative = 0
-    for _ in ts.search_tweets_iterable(search_obj):
-        count_negative += 1
-
-    print('according to twitter, there were {} negative tweets of AAL today'.format(count_negative))
-
-    search_obj.set_positive_attitude_filter()
-    count_positive = 0
-    for _ in ts.search_tweets_iterable(search_obj):
-        count_positive += 1
-
-    sum_of_sentiment = count_negative + count_positive
-    if sum_of_sentiment != 0:
-        percentage_sentiment = count_positive / sum_of_sentiment * 100
-        if percentage_sentiment > 50:
-            percentage_sentiment = str(percentage_sentiment - 50) + "%"
-            sentiment = "positive"
-        else:
-            percentage_sentiment = str(percentage_sentiment - 50) + "%"
-            sentiment = "negative"
     else:
-        percentage_sentiment = "0%"
-        sentiment = "positive"
+        print('checking twitter for tweets of AAL ...')
 
-    print('according to twitter, there were {} positive tweets of AAL today'.format(count_positive))
+        for _ in ts.search_tweets_iterable(search_obj):
+            count_tweets += 1
 
-    results = {'count_tweets': count_tweets, 'count_negative': count_negative, 'count_positive': count_positive}
+        print('there were {} tweets of AAL today'.format(count_tweets))
+
+        search_obj.set_negative_attitude_filter()
+        count_negative = 0
+        for _ in ts.search_tweets_iterable(search_obj):
+            count_negative += 1
+
+        print('according to twitter, there were {} negative tweets of AAL today'.format(count_negative))
+
+        search_obj.set_positive_attitude_filter()
+        count_positive = 0
+        for _ in ts.search_tweets_iterable(search_obj):
+            count_positive += 1
+
+        sum_of_sentiment = count_negative + count_positive
+        if sum_of_sentiment != 0:
+            percentage_sentiment = count_positive / sum_of_sentiment * 100
+            if percentage_sentiment > 50:
+                percentage_sentiment = str(percentage_sentiment - 50) + "%"
+                sentiment = "positive"
+            else:
+                percentage_sentiment = str(percentage_sentiment - 50) + "%"
+                sentiment = "negative"
+        else:
+            percentage_sentiment = "0%"
+            sentiment = "positive"
+
+        saved_tickers[ticker_symbols[0]] = [count_tweets, percentage_sentiment, sentiment]
+
+        print('according to twitter, there were {} positive tweets of AAL today'.format(count_positive))
 
     ############################################################################
     ############################################################################
@@ -100,28 +110,48 @@ def get_twitter_data(ticker):
     search_obj.set_since(yesterday)
     search_obj.set_until(today)
 
-    count_tweets = 0
-    print('checking twitter for tweets of {} ...'.format(ticker))
-    for _ in ts.search_tweets_iterable(search_obj):
-        count_tweets += 1
+    if ticker in saved_tickers:
+        print(f'checking twitter for tweets of {ticker} (saved) ...')
+        count_tweets = saved_tickers[ticker][0]
+        percentage_sentiment = saved_tickers[ticker][1]
+        sentiment = saved_tickers[ticker][2]
 
-    print('there were {} tweets of {} today'.format(count_tweets, ticker))
+    else:
+        count_tweets = 0
+        print('checking twitter for tweets of {} ...'.format(ticker))
+        for _ in ts.search_tweets_iterable(search_obj):
+            count_tweets += 1
 
-    search_obj.set_negative_attitude_filter()
-    count_negative = 0
-    for _ in ts.search_tweets_iterable(search_obj):
-        count_negative += 1
+        print('there were {} tweets of {} today'.format(count_tweets, ticker))
 
-    print('according to twitter, there were {} negative tweets of {} today'.format(count_negative, ticker))
+        search_obj.set_negative_attitude_filter()
+        count_negative = 0
+        for _ in ts.search_tweets_iterable(search_obj):
+            count_negative += 1
 
-    search_obj.set_positive_attitude_filter()
-    count_positive = 0
-    for _ in ts.search_tweets_iterable(search_obj):
-        count_positive += 1
+        print('according to twitter, there were {} negative tweets of {} today'.format(count_negative, ticker))
 
-    print('according to twitter, there were {} positive tweets of {} today'.format(count_positive, ticker))
+        search_obj.set_positive_attitude_filter()
+        count_positive = 0
+        for _ in ts.search_tweets_iterable(search_obj):
+            count_positive += 1
 
-    results = {'count_tweets': count_tweets, 'count_negative': count_negative, 'count_positive': count_positive}
+        sum_of_sentiment = count_negative + count_positive
+        if sum_of_sentiment != 0:
+            percentage_sentiment = count_positive / sum_of_sentiment * 100
+            if percentage_sentiment > 50:
+                percentage_sentiment = str(percentage_sentiment - 50) + "%"
+                sentiment = "positive"
+            else:
+                percentage_sentiment = str(percentage_sentiment - 50) + "%"
+                sentiment = "negative"
+        else:
+            percentage_sentiment = "0%"
+            sentiment = "positive"
+
+        saved_tickers[ticker] = [count_tweets, percentage_sentiment, sentiment]
+
+        print('according to twitter, there were {} positive tweets of {} today'.format(count_positive, ticker))
 
     ############################################################################
     ############################################################################
@@ -135,7 +165,10 @@ def get_twitter_data(ticker):
         subreddits[i] = reddit.subreddit(subreddits[i])
     reddit_mentions = search_ticker_mentions(ticker, subreddits, limit=100)
     ############################################################################
-    return render_template("ticker.html", ticker=ticker, count_tweets=count_tweets, reddit_mentions=reddit_mentions)
+    return render_template("ticker.html", ticker=ticker, count_tweets=count_tweets,
+                           percentage_sentiment=percentage_sentiment,
+                           sentiment=sentiment,
+                           reddit_mentions=reddit_mentions)
 
 
 if __name__ == '__main__':
