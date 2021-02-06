@@ -3,7 +3,7 @@ from TwitterSearch import *
 from datetime import date, timedelta
 
 import praw
-from other.reddit_stocks import search_ticker_mentions
+from reddit_stocks import search_ticker_mentions
 
 app = Flask(__name__)
 
@@ -18,11 +18,16 @@ ACCESS_TOKEN_SECRET = "lcJd372YHdzTID26QvnqP2H1LHKkOB49ukEpEovMwbFOH"
 
 @app.route('/', methods=["POST", "GET"])
 def home_data():
+
+    if request.method == "POST":
+        ticker = request.form["ticker"]
+        return redirect(url_for("get_twitter_data", ticker=ticker))
+
     ####################################################################
     ts = TwitterSearch(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
     search_obj = TwitterSearchOrder()
-    search_obj.set_keywords(['TSLA', '$TSLA', 'TSLA$'])
+    search_obj.set_keywords(['TLRY', '$TLRY', 'TLRY$'])
     search_obj.set_language('en')
     search_obj.set_include_entities(False)
     search_obj.set_since(yesterday)
@@ -66,11 +71,7 @@ def home_data():
 
     ############################################################################
 
-    if request.method == "GET":
-        return render_template("index.html", count_tweets=count_tweets, reddit_mentions=reddit_mentions)
-    else:
-        ticker = request.form["ticker"]
-        return redirect(url_for("get_twitter_data", ticker=ticker))
+    return render_template("index.html", count_tweets=count_tweets, reddit_mentions=reddit_mentions)
 
 
 @app.route('/<ticker>')

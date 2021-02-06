@@ -364,19 +364,19 @@ def search_ticker_upvotes(ticker, subreddits, limit):
     ...
 
 
-if __name__ == "__main__":
-    reddit = praw.Reddit(client_id='fR7cRCGQceQ3DQ',
-                         client_secret='NFFZcftp18b64hnADKBlMsJ3n1eFEw',
-                         user_agent='Stonks',
-                         username='stock2020',
-                         password='stocks2020')
-
-    # subreddits = ['investing', 'stocks', 'economics', 'stockmarket', 'economy', 'wallstreetbets',
-    #               'options', 'finance', 'securityanalysis', 'pennystocks', 'robinhood', 'trading',]
-    subreddits = ['stocks', 'wallstreetbets']
-    for i in range(len(subreddits)):
-        subreddits[i] = reddit.subreddit(subreddits[i])
-
-    # print(get_top_mentions(subreddits, limit=10000))
-    # print(get_most_upvoted(subreddits, limit=100))
-    print(search_ticker_mentions('TSLA', subreddits, limit=100))
+# if __name__ == "__main__":
+#     reddit = praw.Reddit(client_id='fR7cRCGQceQ3DQ',
+#                          client_secret='NFFZcftp18b64hnADKBlMsJ3n1eFEw',
+#                          user_agent='Stonks',
+#                          username='stock2020',
+#                          password='stocks2020')
+#
+#     # subreddits = ['investing', 'stocks', 'economics', 'stockmarket', 'economy', 'wallstreetbets',
+#     #               'options', 'finance', 'securityanalysis', 'pennystocks', 'robinhood', 'trading',]
+#     subreddits = ['stocks', 'wallstreetbets']
+#     for i in range(len(subreddits)):
+#         subreddits[i] = reddit.subreddit(subreddits[i])
+#
+#     # print(get_top_mentions(subreddits, limit=10000))
+#     # print(get_most_upvoted(subreddits, limit=100))
+#     print(search_ticker_mentions('TSLA', subreddits, limit=100))
