@@ -3,7 +3,7 @@ from TwitterSearch import *
 from datetime import date, timedelta
 
 import praw
-from reddit_stocks import search_ticker_mentions
+from reddit_stocks import search_ticker_mentions, search_ticker_upvotes
 
 app = Flask(__name__)
 
@@ -18,7 +18,6 @@ ACCESS_TOKEN_SECRET = "lcJd372YHdzTID26QvnqP2H1LHKkOB49ukEpEovMwbFOH"
 
 @app.route('/', methods=["POST", "GET"])
 def home_data():
-
     if request.method == "POST":
         ticker = request.form["ticker"]
         return redirect(url_for("get_twitter_data", ticker=ticker))
@@ -58,14 +57,14 @@ def home_data():
     if sum_of_sentiment != 0:
         percentage_sentiment = count_positive / sum_of_sentiment * 100
         if percentage_sentiment > 50:
-            percentage_sentiment = str(percentage_sentiment-50) + "%"
-            sentiment="positive"
+            percentage_sentiment = str(percentage_sentiment - 50) + "%"
+            sentiment = "positive"
         else:
             percentage_sentiment = str(percentage_sentiment - 50) + "%"
-            sentiment="negative"
+            sentiment = "negative"
     else:
         percentage_sentiment = "0%"
-        sentiment="positive"
+        sentiment = "positive"
 
     print('according to twitter, there were {} positive tweets of AAL today'.format(count_positive))
 
@@ -82,11 +81,11 @@ def home_data():
     for i in range(len(subreddits)):
         subreddits[i] = reddit.subreddit(subreddits[i])
     reddit_mentions = search_ticker_mentions('AAL', subreddits, limit=100)
-
+    upvotes, downvotes = search_ticker_upvotes('AAL', subreddits, limit=100)
     ############################################################################
 
     return render_template("index.html", count_tweets=count_tweets, percentage_sentiment=percentage_sentiment,
-                           sentiment=sentiment,reddit_mentions=reddit_mentions)
+                           sentiment=sentiment, reddit_mentions=reddit_mentions, upvotes=upvotes, downvotes=downvotes)
 
 
 @app.route('/<ticker>')

@@ -361,7 +361,17 @@ def search_ticker_mentions(ticker, subreddits, limit):
 
 
 def search_ticker_upvotes(ticker, subreddits, limit):
-    ...
+    upvotes, downvotes = 0, 0
+    for sub in subreddits:
+        for submission in sub.new(limit=limit):
+            if " " + ticker + " " in submission.title or \
+                    "$" + ticker + " " in submission.title or \
+                    " " + ticker + "$" in submission.title:
+                upvotes += submission.score // submission.upvote_ratio
+                downvotes += upvotes - submission.score
+
+    return upvotes, downvotes
+
 
 
 # if __name__ == "__main__":
