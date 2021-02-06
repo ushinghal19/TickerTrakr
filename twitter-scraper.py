@@ -1,11 +1,11 @@
-from flask import Flask
+from flask import Flask, redirect, url_for, render_template, request
 from TwitterSearch import *
 from datetime import date
 
 app = Flask(__name__)
 
 
-@app.route('./')
+@app.route('/', methods=["POST", "GET"])
 def home_data():
     today = date.today()
 
@@ -46,10 +46,14 @@ def home_data():
 
     results = {'count_tweets': count_tweets, 'count_negative': count_negative, 'count_positive': count_positive}
 
-    return results
+    if request.method == "GET":
+        return render_template("index.html", count_tweets=count_tweets)
+    else:
+        ticker = request.form["ticker"]
+        return redirect(url_for("get_twitter_data", ticker=ticker))
 
 
-@app.route('/ticker')
+@app.route('/<ticker>')
 def get_twitter_data(ticker):
 
     today = date.today()
@@ -91,4 +95,8 @@ def get_twitter_data(ticker):
 
     results = {'count_tweets': count_tweets, 'count_negative': count_negative, 'count_positive': count_positive}
 
-    return results
+    return render_template("ticker.html", ticker=ticker, count_tweets=count_tweets)
+
+
+if __name__ == '__main__':
+    app.run()
