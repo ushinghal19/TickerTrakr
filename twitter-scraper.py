@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask, redirect, url_for, render_template, request
 from TwitterSearch import *
 from datetime import date, timedelta
@@ -15,7 +17,7 @@ CONSUMER_SECRET = "aFnZYFzf62mZG2WunjhvMDrC9LklUjNRQTE9GkT1MIPdWWdZqj"
 ACCESS_TOKEN_KEY = "903283539860267009-8ndI3VdEEPUGO3K2uj6M8tYSWUFJRNT"
 ACCESS_TOKEN_SECRET = "lcJd372YHdzTID26QvnqP2H1LHKkOB49ukEpEovMwbFOH"
 
-saved_tickers = {}
+saved_tickers = {'AAL': {datetime.date(2021, 2, 6): [198, '100%', 'positive', 0, 100]}}
 
 
 @app.route('/', methods=["POST", "GET"])
@@ -31,11 +33,12 @@ def home_data():
 
 @app.route('/<ticker>', methods=["POST", "GET"])
 def get_twitter_data(ticker):
-
     if request.method == "POST":
         ticker = request.form["ticker"]
         return redirect(url_for("get_twitter_data", ticker=ticker))
 
+    ############################################################################
+    # Getting stock data
     ############################################################################
     ts = TwitterSearch(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
@@ -52,7 +55,7 @@ def get_twitter_data(ticker):
         percentage_sentiment = saved_tickers[ticker][today][1]
         sentiment = saved_tickers[ticker][today][2]
         reddit_mentions = saved_tickers[ticker][today][3]
-        reddit_upvote_ratio = saved_tickers[ticker][today][4]
+        upvote_ratio = saved_tickers[ticker][today][4]
 
     else:
         count_tweets = 0
@@ -104,9 +107,9 @@ def get_twitter_data(ticker):
 
         print('according to twitter, there were {} positive tweets of {} today'.format(count_positive, ticker))
 
-
     ############################################################################
     # TODO: add upvote ratio to reddit info
+    print(saved_tickers)
     return render_template("ticker.html", ticker=ticker, count_tweets=count_tweets,
                            percentage_sentiment=percentage_sentiment,
                            sentiment=sentiment,
