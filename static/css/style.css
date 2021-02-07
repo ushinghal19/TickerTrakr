@@ -397,6 +397,23 @@ form:hover .fa{
   padding-right: 0px;
 }
 
+.stock-price h1{
+  color: white;
+  margin-top: 10%;
+
+  /* left: 10%; */
+  font-size: 500%;
+}
+.stock-price em{
+  font-style: normal;
+  font-size: 22px;
+  font-weight: 200;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+
 
 .portfolio-item img {
   border-radius: 25px;
@@ -414,18 +431,17 @@ form:hover .fa{
     text-align: left;
     width: 100%;
     top: 60%;
-    left: 0;
+    margin-left: 15px;
 }
 
 
 .full-screen-portfolio .portfolio-item h1 {
   position: relative;
   font-size: 22px;
-  text-transform: uppercase;
   color: #fff;
   display: inline-block;
   padding-left: 20px;
-  line-height: 15px;
+  line-height: 0px;
   transform: translateY(25px);
   transition: .5s ease-in-out;
   letter-spacing: 0.5px;
@@ -437,6 +453,10 @@ form:hover .fa{
  }
 
 .full-screen-portfolio .portfolio-item:hover h1 {
+  transform: translateY(0);
+ }
+
+ .full-screen-portfolio .portfolio-item:hover h2 {
   transform: translateY(0);
  }
 

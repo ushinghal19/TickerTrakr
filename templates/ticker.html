@@ -152,19 +152,19 @@
                 <div class="stock-title">
                     <h1> {{ticker}} </h1>
                 </div>
-
-                <!-- Graph -->
-                <div class="graph">
-                    <div class="actual-graph" id="chartContainer" style="height: 300px; width: 100%;"></div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="stock-price">
+                        <h1><em>Closing Price</em><br>{{closing_price}}</h1>
+                    </div>
                 </div>
-
                 <div class="col-md-4 col-sm-6">
                     <div class="portfolio-item">
                         <div class="thumb">
                             <a href="{{ url_for('static', filename='img/portfolio_item_9.jpg')}}" data-lightbox="image-1"><div class="hover-effect">
                                 <div class="hover-content">
-                                    <h1>Twitter <em>Statistics</em></h1>
-                                    <p>Total Tweets Today = {{count_tweets}}<br>There were {{percentage_sentiment}} more tweets that were <strong>{{sentiment}} </strong></p>
+                                    <h1>TWITTER STATISTICS</h1>
+                                    <h1><em>Total Tweets Today = {{count_tweets}}</em></h1>
+                                    <p>There were {{percentage_sentiment}} more tweets that were {{sentiment}}</p>
                                 </div>
                             </div></a>
                             <div class="image">
@@ -178,8 +178,10 @@
                         <div class="thumb">
                             <a href="{{ url_for('static', filename='img/portfolio_item_9.jpg')}}" data-lightbox="image-1"><div class="hover-effect">
                                 <div class="hover-content">
-                                    <h1>Reddit <em>Statistics</em></h1>
-                                    <p>Total Reddit Mentions = {{reddit_mentions}}<br>Upvote Ratio: {{upvote_ratio}}</p>
+                                    <h1>REDDIT STATISTICS</h1>
+                                    <h1><em>Total Reddit Mentions = {{reddit_mentions}}</em></h1>
+                                    <p>Upvote Ratio: {{upvote_ratio}}</p>
+<!--                                    <p>Total Reddit Mentions = {{reddit_mentions}}<br>Upvote Ratio: {{upvote_ratio}}</p>-->
                                 </div>
                             </div></a>
                             <div class="image">
@@ -188,20 +190,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6">
-                    <div class="portfolio-item">
-                        <div class="thumb">
-                            <a href="{{ url_for('static', filename='img/portfolio_item_9.jpg')}}" data-lightbox="image-1"><div class="hover-effect">
-                                <div class="hover-content">
-                                    <h1>News <em>Statistics</em></h1>
-                                    <p>Closing Price: {{closing_price}}</p>
-                                </div>
-                            </div></a>
-                            <div class="image">
-                                <img src="{{ url_for('static', filename='img/portfolio_item_9.jpg')}}">
-                            </div>
-                        </div>
-                    </div>
+<!--                <div class="col-md-4 col-sm-6">-->
+<!--                    <div class="portfolio-item">-->
+<!--                        <div class="thumb">-->
+<!--                            <a href="{{ url_for('static', filename='img/portfolio_item_9.jpg')}}" data-lightbox="image-1"><div class="hover-effect">-->
+<!--                                <div class="hover-content">-->
+<!--                                    <h1>News <em>Statistics</em></h1>-->
+<!--                                    <p>Closing Price: {{closing_price}}</p>-->
+<!--                                </div>-->
+<!--                            </div></a>-->
+<!--                            <div class="image">-->
+<!--                                <img src="{{ url_for('static', filename='img/portfolio_item_9.jpg')}}">-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <!-- Graph -->
+                <div class="graph">
+                    <div class="actual-graph" id="chartContainer" style="height: 300px; width: 100%;"></div>
                 </div>
             </div>
 
