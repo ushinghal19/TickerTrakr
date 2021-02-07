@@ -38,6 +38,10 @@ def get_twitter_data(ticker):
 
     ############################################################################
     # Getting stock data
+    import requests
+    r = requests.get('https://finnhub.io/api/v1/quote?symbol=' + ticker + '&token=c0fjign48v6snribcmh0')
+    print(r.json())
+    closing_price = r.json()['c']
     ############################################################################
     ts = TwitterSearch(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
@@ -120,6 +124,8 @@ def get_twitter_data(ticker):
                            percentage_sentiment=percentage_sentiment,
                            sentiment=sentiment,
                            reddit_mentions=reddit_mentions,
+                           upvote_ratio=upvote_ratio,
+                           closing_price=closing_price,
                            datapoints=datapoints)
 
 
