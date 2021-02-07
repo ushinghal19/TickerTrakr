@@ -106,10 +106,10 @@ def get_twitter_data(ticker):
 
         print('according to twitter, there were {} positive tweets of {} today'.format(count_positive, ticker))
 
-    datapoints = [(saved_tickers[ticker][today], saved_tickers[ticker][today][0])]
+    datapoints = [(today, saved_tickers[ticker][today][0])]
     for i in range(1, 9):
         new_date = today - timedelta(i)
-        datapoints.append((saved_tickers[ticker][new_date], saved_tickers[ticker][new_date][0]))
+        datapoints.append((new_date, saved_tickers[ticker][new_date][0]))
 
     print(datapoints)
     ############################################################################
