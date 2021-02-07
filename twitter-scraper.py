@@ -10,8 +10,8 @@ from cached_tickers import saved_tickers
 
 app = Flask(__name__)
 
-today = date.today()-timedelta(5)
-yesterday = today - timedelta(6)
+today = date.today()
+yesterday = today - timedelta(1)
 
 CONSUMER_KEY = "joSmtoOQCwLPD9bCcaX1c4voM"
 CONSUMER_SECRET = "aFnZYFzf62mZG2WunjhvMDrC9LklUjNRQTE9GkT1MIPdWWdZqj"
@@ -107,10 +107,11 @@ def get_twitter_data(ticker):
         print('according to twitter, there were {} positive tweets of {} today'.format(count_positive, ticker))
 
     datapoints = [(saved_tickers[ticker][today], saved_tickers[ticker][today][0])]
-    for i in range(1, 10):
+    for i in range(1, 9):
         new_date = today - timedelta(i)
         datapoints.append((saved_tickers[ticker][new_date], saved_tickers[ticker][new_date][0]))
 
+    print(datapoints)
     ############################################################################
     # TODO: add upvote ratio to reddit info
     print(saved_tickers)
