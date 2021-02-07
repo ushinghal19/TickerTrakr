@@ -86,6 +86,7 @@ form{
   left: 50%;
   transform: translate(-50%,-50%); */
   margin-left: 30px;
+  margin-right: 30px;
   transition: all 1s;
   width: 50px;
   height: 50px;
@@ -127,7 +128,7 @@ input{
 }
 
 form:hover{
-  width: 200px;
+  width: 400px;
   /* cursor: pointer; */
 }
 
