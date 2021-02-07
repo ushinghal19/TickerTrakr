@@ -98,7 +98,7 @@ def home_data():
                            sentiment=sentiment, reddit_mentions=reddit_mentions, upvotes=upvotes, downvotes=downvotes)
 
 
-@app.route('/<ticker>', methods=["POST", "GET"])
+@app.route('/<ticker>', methods=["POST","GET"])
 def get_twitter_data(ticker):
 
     if request.method == "POST":
