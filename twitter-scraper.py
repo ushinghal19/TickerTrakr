@@ -67,10 +67,10 @@ def home_data():
         if sum_of_sentiment != 0:
             percentage_sentiment = count_positive / sum_of_sentiment * 100
             if percentage_sentiment > 50:
-                percentage_sentiment = str(percentage_sentiment - 50) + "%"
+                percentage_sentiment = str(int(percentage_sentiment) - 50) + "%"
                 sentiment = "positive"
             else:
-                percentage_sentiment = str(percentage_sentiment - 50) + "%"
+                percentage_sentiment = str(int(percentage_sentiment) - 50) + "%"
                 sentiment = "negative"
         else:
             percentage_sentiment = "0%"
@@ -98,8 +98,13 @@ def home_data():
                            sentiment=sentiment, reddit_mentions=reddit_mentions, upvotes=upvotes, downvotes=downvotes)
 
 
-@app.route('/<ticker>')
+@app.route('/<ticker>', methods=["POST", "GET"])
 def get_twitter_data(ticker):
+
+    if request.method == "POST":
+        ticker = request.form["ticker"]
+        return redirect(url_for("get_twitter_data", ticker=ticker))
+
     ############################################################################
     ts = TwitterSearch(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 
@@ -140,10 +145,10 @@ def get_twitter_data(ticker):
         if sum_of_sentiment != 0:
             percentage_sentiment = count_positive / sum_of_sentiment * 100
             if percentage_sentiment > 50:
-                percentage_sentiment = str(percentage_sentiment - 50) + "%"
+                percentage_sentiment = str(int(percentage_sentiment) - 50) + "%"
                 sentiment = "positive"
             else:
-                percentage_sentiment = str(percentage_sentiment - 50) + "%"
+                percentage_sentiment = str(int(percentage_sentiment) - 50) + "%"
                 sentiment = "negative"
         else:
             percentage_sentiment = "0%"
