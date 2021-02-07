@@ -6,18 +6,17 @@ from datetime import date, timedelta
 
 import praw
 from reddit_stocks import search_ticker_mentions, search_ticker_upvotes
+from cached_tickers import saved_tickers
 
 app = Flask(__name__)
 
-today = date.today()
-yesterday = today - timedelta(1)
+today = date.today()-timedelta(5)
+yesterday = today - timedelta(6)
 
 CONSUMER_KEY = "joSmtoOQCwLPD9bCcaX1c4voM"
 CONSUMER_SECRET = "aFnZYFzf62mZG2WunjhvMDrC9LklUjNRQTE9GkT1MIPdWWdZqj"
 ACCESS_TOKEN_KEY = "903283539860267009-8ndI3VdEEPUGO3K2uj6M8tYSWUFJRNT"
 ACCESS_TOKEN_SECRET = "lcJd372YHdzTID26QvnqP2H1LHKkOB49ukEpEovMwbFOH"
-
-saved_tickers = {'AAL': {datetime.date(2021, 2, 6): [198, '100%', 'positive', 0, 100]}}
 
 
 @app.route('/', methods=["POST", "GET"])
@@ -107,13 +106,19 @@ def get_twitter_data(ticker):
 
         print('according to twitter, there were {} positive tweets of {} today'.format(count_positive, ticker))
 
+    datapoints = [(saved_tickers[ticker][today], saved_tickers[ticker][today][0])]
+    for i in range(1, 10):
+        new_date = today - timedelta(i)
+        datapoints.append((saved_tickers[ticker][new_date], saved_tickers[ticker][new_date][0]))
+
     ############################################################################
     # TODO: add upvote ratio to reddit info
     print(saved_tickers)
     return render_template("ticker.html", ticker=ticker, count_tweets=count_tweets,
                            percentage_sentiment=percentage_sentiment,
                            sentiment=sentiment,
-                           reddit_mentions=reddit_mentions)
+                           reddit_mentions=reddit_mentions,
+                           datapoints=datapoints)
 
 
 if __name__ == '__main__':
