@@ -51,6 +51,8 @@ def get_twitter_data(ticker):
         count_tweets = saved_tickers[ticker][today][0]
         percentage_sentiment = saved_tickers[ticker][today][1]
         sentiment = saved_tickers[ticker][today][2]
+        reddit_mentions = saved_tickers[ticker][today][3]
+        reddit_upvote_ratio = saved_tickers[ticker][today][4]
 
     else:
         count_tweets = 0
@@ -84,23 +86,27 @@ def get_twitter_data(ticker):
         else:
             percentage_sentiment = "0%"
             sentiment = "positive"
+        ############################################################################
+        reddit = praw.Reddit(client_id='fR7cRCGQceQ3DQ',
+                             client_secret='NFFZcftp18b64hnADKBlMsJ3n1eFEw',
+                             user_agent='Stonks',
+                             username='stock2020',
+                             password='stocks2020')
 
-        saved_tickers[ticker] = {today: [count_tweets, percentage_sentiment, sentiment]}
+        subreddits = ['stocks',
+                      'wallstreetbets',
+                      ]
+        subreddits = [reddit.subreddit(subreddits[i]) for i in range(len(subreddits))]
+        reddit_mentions = search_ticker_mentions(ticker, subreddits, limit=200)
+        upvote_ratio = search_ticker_upvotes(ticker, subreddits, limit=200)
+
+        saved_tickers[ticker] = {today: [count_tweets, percentage_sentiment, sentiment, reddit_mentions, upvote_ratio]}
 
         print('according to twitter, there were {} positive tweets of {} today'.format(count_positive, ticker))
 
+
     ############################################################################
-    ############################################################################
-    reddit = praw.Reddit(client_id='fR7cRCGQceQ3DQ',
-                         client_secret='NFFZcftp18b64hnADKBlMsJ3n1eFEw',
-                         user_agent='Stonks',
-                         username='stock2020',
-                         password='stocks2020')
-    subreddits = ['stocks', 'wallstreetbets']
-    for i in range(len(subreddits)):
-        subreddits[i] = reddit.subreddit(subreddits[i])
-    reddit_mentions = search_ticker_mentions(ticker, subreddits, limit=100)
-    ############################################################################
+    # TODO: add upvote ratio to reddit info
     return render_template("ticker.html", ticker=ticker, count_tweets=count_tweets,
                            percentage_sentiment=percentage_sentiment,
                            sentiment=sentiment,
