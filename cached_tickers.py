@@ -2,6 +2,7 @@ from datetime import date
 
 saved_tickers = {
     'AAPL': {
+        date(2021, 2, 7): [1232, '96%', 'positive', 3, '94%'],
         date(2021, 2, 6): [1599, '92%', 'positive', 1, '87%'],
         date(2021, 2, 5): [699, '100%', 'positive', 4, '90%'],
         date(2021, 2, 4): [1596, '98%', 'positive', 3, '91%'],
