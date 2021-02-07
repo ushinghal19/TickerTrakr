@@ -742,7 +742,7 @@ footer a:hover {
 
 .grid-portfolio {
   padding: 65px 0px;
-  background-color: #232323;
+  background-color: #1f1f2b;
 }
 
 .grid-portfolio .stock-title h1 {
@@ -753,6 +753,22 @@ footer a:hover {
   font-weight: 500;
   text-align: center;
 }
+
+/* Graph */
+.grid-portfolio .graph{
+  border-radius: 25px;
+  background: #27293d;
+  padding: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: stretch;
+}
+
+.grid-portfolio .graph .actual-graph{
+  transform: scale(0.85);
+}
+
+/* End Graph */
 
 .grid-portfolio .portfolio-item {
   margin: 15px 0px;
