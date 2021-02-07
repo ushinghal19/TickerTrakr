@@ -27,7 +27,7 @@
                 theme: "dark2",
                 backgroundColor: "#27293d",
                 title:{
-                    text: 'Traffic Data'
+                    text: 'Activities Data'
                 },
                 axisX:{
                     valueFormatString: "DD MMM",
@@ -37,7 +37,7 @@
                     }
                 },
                 axisY: {
-                    title: "Number of Visits",
+                    title: "Number of Activities",
                     includeZero: true,
                     crosshair: {
                         enabled: true
@@ -149,7 +149,7 @@
                                 <div class="hover-content">
                                     <h1>TWITTER STATISTICS</h1>
                                     <h1><em>Total Tweets Today = {{count_tweets}}</em></h1>
-                                    <p>There were {{percentage_sentiment}} more tweets that were {{sentiment}}</p>
+                                    <p>{{percentage_sentiment}} more tweets were {{sentiment}}</p>
                                 </div>
                             </div></a>
                             <div class="image">
