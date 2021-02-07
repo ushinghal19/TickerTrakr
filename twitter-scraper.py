@@ -106,16 +106,17 @@ def get_twitter_data(ticker):
 
         print('according to twitter, there were {} positive tweets of {} today'.format(count_positive, ticker))
 
-    datapoints = [(today, saved_tickers[ticker][today][0])]
+    datapoints = [(today, saved_tickers[ticker][today][0], saved_tickers[ticker][today][3])]
     for i in range(1, 11):
         new_date = today - timedelta(i)
-        datapoints.append((new_date, saved_tickers[ticker][new_date][0]))
+        datapoints.append((new_date, saved_tickers[ticker][new_date][0], saved_tickers[ticker][new_date][3]))
 
     print(datapoints)
     print("length of datapoints = " + str(len(datapoints)))
     ############################################################################
     # TODO: add upvote ratio to reddit info
     print(saved_tickers)
+
     return render_template("ticker.html", ticker=ticker, count_tweets=count_tweets,
                            percentage_sentiment=percentage_sentiment,
                            sentiment=sentiment,
